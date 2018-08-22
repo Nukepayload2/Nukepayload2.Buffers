@@ -3,6 +3,16 @@
   <PropertyGroup>
     <RootNamespace>Nukepayload2.Buffers</RootNamespace>
     <TargetFramework>netstandard1.4</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Nukepayload2</Authors>
+    <Description>Provides _malloca-like fixed buffers for .NET .</Description>
+    <PackageLicenseUrl>https://github.com/Nukepayload2/Nukepayload2.Buffers/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Nukepayload2/Nukepayload2.Buffers</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Nukepayload2/Nukepayload2.Buffers.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>stackalloc buffer</PackageTags>
+    <PackageReleaseNotes>Initial version.</PackageReleaseNotes>
+    <Version>1.0.0-beta</Version>
   </PropertyGroup>
 
   <ItemGroup>
