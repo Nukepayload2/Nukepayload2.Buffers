@@ -17,6 +17,7 @@ For Each genLen In lengths
     ''' Stack allocated list of <typeparamref name="T"/> * <#=genLen#>.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedList<#=genLen#>(Of T As Structure)
 <#
 For i = 0 To genLen - 1
@@ -220,6 +221,7 @@ Next
     ''' Stack allocated <typeparamref name="T"/> * <#=genLen#>.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedBuffer<#=genLen#>(Of T As Structure)
 <#
 For i = 0 To genLen - 1

@@ -8,6 +8,7 @@ Namespace Fixed
     ''' Stack allocated list of <typeparamref name="T"/> * 2.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedList2(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -206,6 +207,7 @@ Namespace Fixed
     ''' Stack allocated <typeparamref name="T"/> * 2.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedBuffer2(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -278,6 +280,7 @@ Namespace Fixed
     ''' Stack allocated list of <typeparamref name="T"/> * 4.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedList4(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -478,6 +481,7 @@ Namespace Fixed
     ''' Stack allocated <typeparamref name="T"/> * 4.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedBuffer4(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -552,6 +556,7 @@ Namespace Fixed
     ''' Stack allocated list of <typeparamref name="T"/> * 8.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedList8(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -756,6 +761,7 @@ Namespace Fixed
     ''' Stack allocated <typeparamref name="T"/> * 8.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedBuffer8(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -834,6 +840,7 @@ Namespace Fixed
     ''' Stack allocated list of <typeparamref name="T"/> * 16.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedList16(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -1046,6 +1053,7 @@ Namespace Fixed
     ''' Stack allocated <typeparamref name="T"/> * 16.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedBuffer16(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -1132,6 +1140,7 @@ Namespace Fixed
     ''' Stack allocated list of <typeparamref name="T"/> * 32.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedList32(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -1360,6 +1369,7 @@ Namespace Fixed
     ''' Stack allocated <typeparamref name="T"/> * 32.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedBuffer32(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -1462,6 +1472,7 @@ Namespace Fixed
     ''' Stack allocated list of <typeparamref name="T"/> * 64.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedList64(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -1722,6 +1733,7 @@ Namespace Fixed
     ''' Stack allocated <typeparamref name="T"/> * 64.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedBuffer64(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -1856,6 +1868,7 @@ Namespace Fixed
     ''' Stack allocated list of <typeparamref name="T"/> * 128.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedList128(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -2180,6 +2193,7 @@ Namespace Fixed
     ''' Stack allocated <typeparamref name="T"/> * 128.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedBuffer128(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -2378,6 +2392,7 @@ Namespace Fixed
     ''' Stack allocated list of <typeparamref name="T"/> * 256.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedList256(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -2830,6 +2845,7 @@ Namespace Fixed
     ''' Stack allocated <typeparamref name="T"/> * 256.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedBuffer256(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -3156,6 +3172,7 @@ Namespace Fixed
     ''' Stack allocated list of <typeparamref name="T"/> * 512.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedList512(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -3864,6 +3881,7 @@ Namespace Fixed
     ''' Stack allocated <typeparamref name="T"/> * 512.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedBuffer512(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -4446,6 +4464,7 @@ Namespace Fixed
     ''' Stack allocated list of <typeparamref name="T"/> * 1024.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedList1024(Of T As Structure)
         Private _0 As T
         Private _1 As T
@@ -5666,6 +5685,7 @@ Namespace Fixed
     ''' Stack allocated <typeparamref name="T"/> * 1024.
     ''' </summary>
     <SuppressMessage("", "IDE0044")>
+    <UnsafeValueType>
     Public Structure FixedBuffer1024(Of T As Structure)
         Private _0 As T
         Private _1 As T
