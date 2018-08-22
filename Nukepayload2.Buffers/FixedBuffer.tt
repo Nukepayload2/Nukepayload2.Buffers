@@ -1,0 +1,299 @@
+﻿<#@ template debug="false" hostspecific="false" language="VB" compilerOptions="/optionstrict+ /optioninfer+ /optionexplicit+"#>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+Imports System.ComponentModel
+Imports System.Diagnostics.CodeAnalysis
+Imports System.Runtime.CompilerServices
+
+Namespace Fixed
+<#
+Dim lengths = From i In Enumerable.Range(1, 10) Select 2 ^ i
+For Each genLen In lengths
+#>
+
+    ''' <summary>
+    ''' Stack allocated list of <typeparamref name="T"/> * <#=genLen#>.
+    ''' </summary>
+    <SuppressMessage("", "IDE0044")>
+    Public Structure FixedList<#=genLen#>(Of T As Structure)
+<#
+For i = 0 To genLen - 1
+#>
+        Private _<#=i#> As T
+<#
+Next
+#>
+        ''' <summary>
+        ''' The length of the current buffer. It is between 0 (inclusive) and <see cref="MaxCount"/> (exclusive).
+        ''' </summary>
+        Public Count As Integer
+        ''' <summary>
+        ''' The maximum length of the current buffer.
+        ''' </summary>
+        Public Const MaxCount = <#=genLen#>
+
+        ''' <summary>
+        ''' Gets or sets the specified item at the specified index.
+        ''' </summary>
+        ''' <param name="index">The index of the element.</param>
+        ''' <value>The element at the specified index.</value>
+        Default Public Property Item(index As Integer) As T
+            Get
+                If index < 0 OrElse index >= Count Then Throw New ArgumentOutOfRangeException()
+                Return Unsafe.Add(_0, index)
+            End Get
+            Set(value As T)
+                If index < 0 OrElse index >= Count Then Throw New ArgumentOutOfRangeException()
+                Unsafe.Add(_0, index) = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets or sets the specified item at the specified index without boundary check.
+        ''' </summary>
+        ''' <param name="index">The index of the element.</param>
+        ''' <value>The element at the specified index.</value>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        Public Property UnsafeItem(index As Integer) As T
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            Get
+                Return Unsafe.Add(_0, index)
+            End Get
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            Set(value As T)
+                Unsafe.Add(_0, index) = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets a new value at the specified index. Returns whether the element was got.
+        ''' </summary>
+        ''' <param name="index">The index of the new element.</param>
+        ''' <param name="value">The new value to be set.</param>
+        ''' <returns>If returns <see langword="True"/>, the item was set successfully. Otherwise, the item can't be acquired.</returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function TryGetItem(index As Integer, ByRef value As T) As Boolean
+            If index < 0 OrElse index >= Count Then Return False
+            value = Unsafe.Add(_0, index)
+            Return True
+        End Function
+
+        ''' <summary>
+        ''' Sets a new value at the specified index. Returns whether the element was set.
+        ''' </summary>
+        ''' <param name="index">The index of the new element.</param>
+        ''' <param name="value">The new value to be set.</param>
+        ''' <returns>If returns <see langword="True"/>, the item was set successfully. Otherwise, the item can't be set.</returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function TrySetItem(index As Integer, value As T) As Boolean
+            If index < 0 OrElse index >= Count Then Return False
+            Unsafe.Add(_0, index) = value
+            Return True
+        End Function
+
+        ''' <summary>
+        ''' Adds a new value to the list. Returns whether the element was added.
+        ''' </summary>
+        ''' <param name="value">The new value to be added.</param>
+        ''' <returns>If returns <see langword="True"/>, the item was added successfully. Otherwise, the item can't be added.</returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function TryAdd(value As T) As Boolean
+            If Count >= MaxCount Then Return False
+            Unsafe.Add(_0, Count) = value
+            Count += 1
+            Return True
+        End Function
+
+        ''' <summary>
+        ''' Adds a new value to the list.
+        ''' </summary>
+        ''' <param name="value">The new value to be added.</param>
+        ''' <exception cref="OverflowException"/>
+        Public Sub Add(value As T)
+            If Count >= MaxCount Then Throw New OverflowException
+            Unsafe.Add(_0, Count) = value
+            Count += 1
+        End Sub
+
+        ''' <summary>
+        ''' Adds a new value to the list without boundary check.
+        ''' </summary>
+        ''' <param name="value">The new value to be added.</param>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Sub UnsafeAdd(value As T)
+            Unsafe.Add(_0, Count) = value
+            Count += 1
+        End Sub
+
+        ''' <summary>
+        ''' Removes an item from the specified index.
+        ''' </summary>
+        ''' <param name="index">The index of the item.</param>
+        ''' <exception cref="IndexOutOfRangeException"/>
+        Public Sub RemoveAt(index As Integer)
+            If index >= Count OrElse index < 0 Then Throw New IndexOutOfRangeException
+            For i = index To Count - 2
+                Unsafe.Add(_0, i) = Unsafe.Add(_0, i + 1)
+            Next
+            Count -= 1
+        End Sub
+        
+        ''' <summary>
+        ''' Removes an item from the specified index without boundary check.
+        ''' </summary>
+        ''' <param name="index">The index of the item.</param>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Sub UnsafeRemoveAt(index As Integer)
+            For i = index To Count - 2
+                Unsafe.Add(_0, i) = Unsafe.Add(_0, i + 1)
+            Next
+            Count -= 1
+        End Sub
+
+        ''' <summary>
+        ''' Removes an item from the specified index.
+        ''' </summary>
+        ''' <param name="index">The index of the item.</param>
+        ''' <returns>Whether the operation succeed.</returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function TryRemoveAt(index As Integer) As Boolean
+            If index >= Count OrElse index < 0 Then Return False
+            For i = index To Count - 2
+                Unsafe.Add(_0, i) = Unsafe.Add(_0, i + 1)
+            Next
+            Count -= 1
+            Return True
+        End Function
+
+        ''' <summary>
+        ''' Inserts an item into the specified index.
+        ''' </summary>
+        ''' <param name="index">The index of the item.</param>
+        ''' <param name="value">The new value.</param>
+        ''' <exception cref="IndexOutOfRangeException"/>
+        Public Sub Insert(index As Integer, value As T)
+            If index > Count OrElse index >= MaxCount OrElse index < 0 Then Throw New IndexOutOfRangeException
+            For i = Count - 1 To index Step -1
+                Unsafe.Add(_0, i + 1) = Unsafe.Add(_0, i)
+            Next
+            Unsafe.Add(_0, index) = value
+            Count += 1
+        End Sub
+        
+        ''' <summary>
+        ''' Inserts an item into the specified index without boundary check.
+        ''' </summary>
+        ''' <param name="index">The index of the item.</param>
+        ''' <param name="value">The new value.</param>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Sub UnsafeInsert(index As Integer, value As T)
+            For i = Count - 1 To index Step -1
+                Unsafe.Add(_0, i + 1) = Unsafe.Add(_0, i)
+            Next
+            Unsafe.Add(_0, index) = value
+            Count += 1
+        End Sub
+
+        ''' <summary>
+        ''' Inserts an item into the specified index.
+        ''' </summary>
+        ''' <param name="index">The index of the new item.</param>
+        ''' <param name="value">The new value.</param>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function TryInsert(index As Integer, value As T) As Boolean
+            If index > Count OrElse index >= MaxCount OrElse index < 0 Then Return False
+            For i = Count - 1 To index Step -1
+                Unsafe.Add(_0, i + 1) = Unsafe.Add(_0, i)
+            Next
+            Unsafe.Add(_0, index) = value
+            Count += 1
+            Return True
+        End Function
+    End Structure
+
+    ''' <summary>
+    ''' Stack allocated <typeparamref name="T"/> * <#=genLen#>.
+    ''' </summary>
+    <SuppressMessage("", "IDE0044")>
+    Public Structure FixedBuffer<#=genLen#>(Of T As Structure)
+<#
+For i = 0 To genLen - 1
+#>
+        Private _<#=i#> As T
+<#
+Next
+#>
+        ''' <summary>
+        ''' The maximum length of the current buffer.
+        ''' </summary>
+        Public Const MaxCount = <#=genLen#>
+
+        ''' <summary>
+        ''' Gets or sets the specified item at the specified index.
+        ''' </summary>
+        ''' <param name="index">The index of the element.</param>
+        ''' <value>The element at the specified index.</value>
+        Default Public Property Item(index As Integer) As T
+            Get
+                If index < 0 OrElse index >= MaxCount Then Throw New ArgumentOutOfRangeException()
+                Return Unsafe.Add(_0, index)
+            End Get
+            Set(value As T)
+                If index < 0 OrElse index >= MaxCount Then Throw New ArgumentOutOfRangeException()
+                Unsafe.Add(_0, index) = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets or sets the specified item at the specified index without boundary check.
+        ''' </summary>
+        ''' <param name="index">The index of the element.</param>
+        ''' <value>The element at the specified index.</value>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        Public Property UnsafeItem(index As Integer) As T
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            Get
+                Return Unsafe.Add(_0, index)
+            End Get
+            <MethodImpl(MethodImplOptions.AggressiveInlining)>
+            Set(value As T)
+                Unsafe.Add(_0, index) = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets a new value at the specified index. Returns whether the element was got.
+        ''' </summary>
+        ''' <param name="index">The index of the new element.</param>
+        ''' <param name="value">The new value to be set.</param>
+        ''' <returns>If returns <see langword="True"/>, the item was set successfully. Otherwise, the item can't be acquired.</returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function TryGetItem(index As Integer, ByRef value As T) As Boolean
+            If index < 0 OrElse index >= MaxCount Then Return False
+            value = Unsafe.Add(_0, index)
+            Return True
+        End Function
+
+        ''' <summary>
+        ''' Sets a new value at the specified index. Returns whether the element was set.
+        ''' </summary>
+        ''' <param name="index">The index of the new element.</param>
+        ''' <param name="value">The new value to be set.</param>
+        ''' <returns>If returns <see langword="True"/>, the item was set successfully. Otherwise, the item can't be set.</returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function TrySetItem(index As Integer, value As T) As Boolean
+            If index < 0 OrElse index >= MaxCount Then Return False
+            Unsafe.Add(_0, index) = value
+            Return True
+        End Function
+    End Structure
+<#
+Next
+#>
+End Namespace
+<#@ output extension=".vb" #>
